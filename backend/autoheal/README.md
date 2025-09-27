@@ -1,5 +1,11 @@
 # Galaxy Autopilot - Multi-Layer AI Self-Healing System
 
+## Important Concept Clarification
+
+**Galaxy Autopilot is a conceptual system software design** intended to operate as **phone backend system software**, not as a webpage or web application. The Galaxy Autopilot concept represents an innovative approach to autonomous device maintenance that would be integrated directly into Samsung Galaxy devices as system-level software, similar to how Device Care or Knox Security operates within the Android framework.
+
+**Note**: The current implementation includes a web-based demonstration interface (`GalaxyAutopilotPage.js`) solely for concept visualization and hackathon presentation purposes. In actual deployment, Galaxy Autopilot would function as native Android system software integrated into Samsung Galaxy devices.
+
 ## 🎯 Project Vision & Mission
 
 **Galaxy Autopilot** represents a revolutionary paradigm shift in device maintenance, transforming Samsung Galaxy devices from reactive, problem-prone systems into intelligent, self-healing organisms that anticipate, prevent, and autonomously resolve issues before they impact user experience.
