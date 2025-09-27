@@ -1,0 +1,131 @@
+# Samsung Galaxy Autopilot - SmartFix-AI
+# Core Requirements File
+
+# Core Framework & API
+fastapi
+uvicorn[standard]
+pydantic
+pydantic-settings
+python-dotenv
+python-multipart
+redis
+
+# Database & Data Persistence
+sqlalchemy
+alembic
+
+# HTTP Clients & Networking
+requests
+aiohttp
+httpx
+
+# AI & Machine Learning Services
+google-generativeai
+transformers
+torch
+sentence-transformers
+huggingface-hub
+faiss-cpu
+numpy<2.2,>=1.24
+scikit-learn
+pandas
+scipy
+
+# Image Processing & Computer Vision
+pillow
+pytesseract
+opencv-python
+
+# Text Processing & NLP
+nltk
+spacy
+
+# Voice Processing & Audio
+pyaudio
+sounddevice
+
+# System Monitoring & Process Management
+psutil
+py-cpuinfo
+GPUtil
+pyautogui
+
+# Windows-Specific Dependencies
+wmi; sys_platform == "win32"
+pycaw; sys_platform == "win32"
+comtypes; sys_platform == "win32"
+
+# Security & Authentication
+passlib[bcrypt]
+bcrypt
+python-jose[cryptography]
+cryptography
+
+# External Services Integration
+twilio
+
+# Data Visualization & Analysis
+matplotlib
+seaborn
+plotly
+
+# Configuration & Environment
+pyyaml
+toml
+
+# Logging & Monitoring
+structlog
+loguru
+
+# Time & Date Handling
+python-dateutil
+pytz
+
+# Data Serialization
+orjson
+msgpack
+
+# File & Path Operations
+watchdog
+
+# System Information & Diagnostics
+distro
+
+# Development & Testing
+pytest
+pytest-asyncio
+pytest-cov
+black
+flake8
+pydantic[email]
+
+# Utilities
+tqdm
+
+# Additional Dependencies
+statsmodels
+xgboost
+
+# =============================================================================
+# OCR ENGINE INSTALLATION REQUIREMENTS
+# =============================================================================
+# IMPORTANT: OCR functionality requires Tesseract OCR engine installation
+# 
+# Windows Installation:
+# 1. Download Tesseract from: https://github.com/UB-Mannheim/tesseract/wiki
+# 2. Install Tesseract OCR (recommended version 5.x)
+# 3. Add Tesseract to system PATH
+# 4. Install language packs for your required languages
+# 
+# Linux Installation:
+# sudo apt-get install tesseract-ocr tesseract-ocr-eng tesseract-ocr-[lang]
+# 
+# macOS Installation:
+# brew install tesseract tesseract-lang
+# 
+# Verify Installation:
+# tesseract --version
+# 
+# Note: pytesseract Python package requires the Tesseract binary to be installed
+# on your system. The Python package is just a wrapper around the Tesseract
+# command-line tool.

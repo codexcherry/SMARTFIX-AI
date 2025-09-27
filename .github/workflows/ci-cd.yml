@@ -1,0 +1,455 @@
+name: SmartFix-AI CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+env:
+  PYTHON_VERSION: '3.11'
+  NODE_VERSION: '18'
+
+jobs:
+  # =============================================================================
+  # SECURITY SCANNING
+  # =============================================================================
+  security-scan:
+    name: Security Scan
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Run Bandit security scan
+        run: |
+          pip install bandit
+          bandit -r backend/ -f json -o bandit-report.json || true
+
+      - name: Run Safety check
+        run: |
+          pip install safety
+          safety check --json --output safety-report.json || true
+
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'fs'
+          scan-ref: '.'
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+
+      - name: Upload security scan results
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: trivy-results.sarif
+
+  # =============================================================================
+  # BACKEND TESTING
+  # =============================================================================
+  backend-test:
+    name: Backend Tests
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_PASSWORD: test_password
+          POSTGRES_DB: test_db
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
+      redis:
+        image: redis:7
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 6379:6379
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Cache pip dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('backend/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
+      - name: Install dependencies
+        run: |
+          cd backend
+          pip install -r requirements.txt
+          pip install pytest pytest-cov pytest-asyncio httpx
+
+      - name: Run linting
+        run: |
+          cd backend
+          pip install flake8 black isort
+          flake8 app/ --max-line-length=100 --ignore=E203,W503
+          black --check app/
+          isort --check-only app/
+
+      - name: Run type checking
+        run: |
+          cd backend
+          pip install mypy
+          mypy app/ --ignore-missing-imports
+
+      - name: Run tests with coverage
+        env:
+          DATABASE_URL: postgresql://postgres:test_password@localhost:5432/test_db
+          REDIS_URL: redis://localhost:6379
+          SECRET_KEY: test_secret_key_for_testing_only
+          HUGGINGFACE_API_KEY: test_key
+          GEMINI_API_KEY: test_key
+          SERPAPI_KEY: test_key
+        run: |
+          cd backend
+          pytest --cov=app --cov-report=xml --cov-report=html --cov-report=term-missing
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          file: backend/coverage.xml
+          flags: backend
+          name: backend-coverage
+
+  # =============================================================================
+  # FRONTEND TESTING
+  # =============================================================================
+  frontend-test:
+    name: Frontend Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install dependencies
+        run: |
+          cd frontend
+          npm ci
+
+      - name: Run linting
+        run: |
+          cd frontend
+          npm run lint
+
+      - name: Run tests
+        run: |
+          cd frontend
+          npm test -- --coverage --watchAll=false
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          file: frontend/coverage/lcov.info
+          flags: frontend
+          name: frontend-coverage
+
+  # =============================================================================
+  # INTEGRATION TESTING
+  # =============================================================================
+  integration-test:
+    name: Integration Tests
+    runs-on: ubuntu-latest
+    needs: [backend-test, frontend-test]
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_PASSWORD: test_password
+          POSTGRES_DB: test_db
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
+      redis:
+        image: redis:7
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 6379:6379
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Install dependencies
+        run: |
+          cd backend
+          pip install -r requirements.txt
+          pip install pytest-asyncio httpx
+
+      - name: Run integration tests
+        env:
+          DATABASE_URL: postgresql://postgres:test_password@localhost:5432/test_db
+          REDIS_URL: redis://localhost:6379
+          SECRET_KEY: test_secret_key_for_testing_only
+          HUGGINGFACE_API_KEY: test_key
+          GEMINI_API_KEY: test_key
+          SERPAPI_KEY: test_key
+        run: |
+          cd backend
+          pytest tests/integration/ -v
+
+  # =============================================================================
+  # DOCKER BUILD & TEST
+  # =============================================================================
+  docker-build:
+    name: Docker Build & Test
+    runs-on: ubuntu-latest
+    needs: [backend-test, frontend-test]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build and test Docker images
+        run: |
+          # Build API Gateway
+          docker build -f backend/Dockerfile.gateway -t smartfix-ai-gateway:test ./backend
+          
+          # Build AI Service
+          docker build -f backend/Dockerfile.ai -t smartfix-ai-service:test ./backend
+          
+          # Build Frontend
+          docker build -t smartfix-ai-frontend:test ./frontend
+
+      - name: Run Docker container tests
+        run: |
+          # Test API Gateway container
+          docker run --rm smartfix-ai-gateway:test python -c "import app; print('API Gateway container test passed')"
+          
+          # Test AI Service container
+          docker run --rm smartfix-ai-service:test python -c "import app; print('AI Service container test passed')"
+
+  # =============================================================================
+  # DEPLOYMENT TO STAGING
+  # =============================================================================
+  deploy-staging:
+    name: Deploy to Staging
+    runs-on: ubuntu-latest
+    needs: [security-scan, integration-test, docker-build]
+    if: github.ref == 'refs/heads/develop'
+    environment: staging
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Build and push Docker images
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REPOSITORY: smartfix-ai
+          IMAGE_TAG: staging-${{ github.sha }}
+        run: |
+          # Build and push API Gateway
+          docker build -f backend/Dockerfile.gateway -t $ECR_REGISTRY/$ECR_REPOSITORY-gateway:$IMAGE_TAG ./backend
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY-gateway:$IMAGE_TAG
+          
+          # Build and push AI Service
+          docker build -f backend/Dockerfile.ai -t $ECR_REGISTRY/$ECR_REPOSITORY-ai:$IMAGE_TAG ./backend
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY-ai:$IMAGE_TAG
+          
+          # Build and push Frontend
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY-frontend:$IMAGE_TAG ./frontend
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY-frontend:$IMAGE_TAG
+
+      - name: Deploy to staging environment
+        run: |
+          # Update ECS services with new image tags
+          aws ecs update-service --cluster smartfix-ai-staging --service api-gateway --force-new-deployment
+          aws ecs update-service --cluster smartfix-ai-staging --service ai-service --force-new-deployment
+          aws ecs update-service --cluster smartfix-ai-staging --service frontend --force-new-deployment
+
+      - name: Run smoke tests
+        run: |
+          # Wait for deployment to complete
+          sleep 60
+          
+          # Run smoke tests against staging environment
+          curl -f http://staging.smartfix-ai.com/health || exit 1
+          curl -f http://staging.smartfix-ai.com/api/v1/health || exit 1
+
+  # =============================================================================
+  # DEPLOYMENT TO PRODUCTION
+  # =============================================================================
+  deploy-production:
+    name: Deploy to Production
+    runs-on: ubuntu-latest
+    needs: [security-scan, integration-test, docker-build]
+    if: github.ref == 'refs/heads/main'
+    environment: production
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Build and push Docker images
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REPOSITORY: smartfix-ai
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          # Build and push API Gateway
+          docker build -f backend/Dockerfile.gateway -t $ECR_REGISTRY/$ECR_REPOSITORY-gateway:$IMAGE_TAG ./backend
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY-gateway:$IMAGE_TAG
+          
+          # Build and push AI Service
+          docker build -f backend/Dockerfile.ai -t $ECR_REGISTRY/$ECR_REPOSITORY-ai:$IMAGE_TAG ./backend
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY-ai:$IMAGE_TAG
+          
+          # Build and push Frontend
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY-frontend:$IMAGE_TAG ./frontend
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY-frontend:$IMAGE_TAG
+
+      - name: Deploy to production environment
+        run: |
+          # Update ECS services with new image tags
+          aws ecs update-service --cluster smartfix-ai-production --service api-gateway --force-new-deployment
+          aws ecs update-service --cluster smartfix-ai-production --service ai-service --force-new-deployment
+          aws ecs update-service --cluster smartfix-ai-production --service frontend --force-new-deployment
+
+      - name: Run production health checks
+        run: |
+          # Wait for deployment to complete
+          sleep 120
+          
+          # Run comprehensive health checks
+          curl -f https://smartfix-ai.com/health || exit 1
+          curl -f https://smartfix-ai.com/api/v1/health || exit 1
+          
+          # Check all services are healthy
+          aws ecs describe-services --cluster smartfix-ai-production --services api-gateway ai-service frontend
+
+      - name: Notify deployment success
+        if: success()
+        run: |
+          # Send notification to Slack/Discord
+          curl -X POST ${{ secrets.SLACK_WEBHOOK_URL }} \
+            -H 'Content-type: application/json' \
+            -d '{"text":"✅ SmartFix-AI production deployment successful!"}'
+
+      - name: Notify deployment failure
+        if: failure()
+        run: |
+          # Send notification to Slack/Discord
+          curl -X POST ${{ secrets.SLACK_WEBHOOK_URL }} \
+            -H 'Content-type: application/json' \
+            -d '{"text":"❌ SmartFix-AI production deployment failed!"}'
+
+  # =============================================================================
+  # PERFORMANCE TESTING
+  # =============================================================================
+  performance-test:
+    name: Performance Tests
+    runs-on: ubuntu-latest
+    needs: [deploy-staging]
+    if: github.ref == 'refs/heads/develop'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Install locust
+        run: pip install locust
+
+      - name: Run performance tests
+        run: |
+          locust -f backend/tests/performance/locustfile.py \
+            --host=http://staging.smartfix-ai.com \
+            --users=100 \
+            --spawn-rate=10 \
+            --run-time=5m \
+            --headless \
+            --html=performance-report.html
+
+      - name: Upload performance report
+        uses: actions/upload-artifact@v3
+        with:
+          name: performance-report
+          path: performance-report.html
+
+  # =============================================================================
+  # SECURITY AUDIT
+  # =============================================================================
+  security-audit:
+    name: Security Audit
+    runs-on: ubuntu-latest
+    needs: [deploy-production]
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Run OWASP ZAP scan
+        uses: zaproxy/action-full-scan@v0.8.0
+        with:
+          target: 'https://smartfix-ai.com'
+
+      - name: Upload security report
+        uses: actions/upload-artifact@v3
+        with:
+          name: security-audit-report
+          path: zap-report.html
