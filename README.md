@@ -29,7 +29,7 @@ SmartFix-AI addresses these challenges through Galaxy Autopilot, a comprehensive
 
 ### System Architecture Overview
 
-![SmartFix-AI Technical Architecture](Submissions/Results/system_architecture_flow.png)
+![SmartFix-AI Technical Architecture](Submissions/docs/ARCHITECTURE_DIAGRAM.png)
 
 **Architecture Description:** The SmartFix-AI system implements a comprehensive multi-layered architecture that seamlessly integrates Samsung Galaxy ecosystem components with advanced AI processing capabilities, featuring multimodal input processing, network-aware AI processing, core services layer, Galaxy Autopilot system, Samsung integration layer, and data management layer.
 
@@ -196,7 +196,7 @@ git clone https://github.com/codexcherry/SMARTFIX-AI.git
 cd SmartFix-AI
 ```
 
-### 2. Backend Setup
+### 2. Smartfix Backend Setup
 
 ```bash
 
@@ -213,11 +213,14 @@ source venv/bin/activate
 pip install -r requirements.txt
 
 # Configure Samsung environment variables
-
 # Edit .env with Samsung API keys and configuration
+
+# Run the backend
+cd backend
+python main.py
 ```
 
-### 3. Samsung Frontend Setup
+### 3. Smartfix Frontend Setup
 
 ```bash
 # Navigate to frontend directory (in a new terminal)
@@ -230,7 +233,7 @@ npm install
 npm start
 ```
 
-### 4. Galaxy Autopilot Configuration
+### 4. SmartFix Configuration
 
 
 Galaxy Autopilot will be available at:
@@ -770,6 +773,13 @@ graph TD
 
 ---
 
+## From CodexCoders Team
+
+We are honored to present SmartFix-AI to Samsung Electronics, a company that has consistently demonstrated visionary leadership in consumer electronics innovation. Samsung's commitment to pushing technological boundaries and creating devices that enhance human experiences aligns perfectly with our vision of autonomous device intelligence.
+
+Samsung's legacy of innovation, from pioneering smartphone technology to advancing AI and semiconductor capabilities, inspires us to contribute to the next chapter of intelligent device management. We believe SmartFix-AI represents the future of device maintenance that Samsung can lead, transforming how users interact with technology and ensuring Galaxy devices remain at the forefront of innovation.
+
 **Samsung Galaxy Autopilot** - Transforming Galaxy devices into self-healing, intelligent companions that maintain optimal performance, ensure system stability, and maintain uncompromising security standards.
 
 *Empowering Samsung to lead the autonomous device intelligence revolution.*
+*Prepared by CodexCoders Team for Samsung PRISM GenAI Hackathon 2025*

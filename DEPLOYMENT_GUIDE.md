@@ -254,4 +254,12 @@ If you encounter issues:
 
 ---
 
+## From CodexCoders Team
+
+We are honored to present SmartFix-AI to Samsung Electronics, a company that has consistently demonstrated visionary leadership in consumer electronics innovation. Samsung's commitment to pushing technological boundaries and creating devices that enhance human experiences aligns perfectly with our vision of autonomous device intelligence.
+
+Samsung's legacy of innovation, from pioneering smartphone technology to advancing AI and semiconductor capabilities, inspires us to contribute to the next chapter of intelligent device management. We believe SmartFix-AI represents the future of device maintenance that Samsung can lead, transforming how users interact with technology and ensuring Galaxy devices remain at the forefront of innovation.
+
 **Remember**: Always test in a development environment before deploying to production!
+
+*Prepared by CodexCoders Team for Samsung PRISM GenAI Hackathon 2025*

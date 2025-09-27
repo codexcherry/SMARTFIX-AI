@@ -1,5 +1,9 @@
 # CodexCoders - SmartFix-AI: Samsung Galaxy Device Intelligence Platform
 
+## Project Demonstration
+
+**Video Demonstration**: https://drive.google.com/file/d/1afr_XPnipVjzcVqpqOaGBQd0UeChpY1U/view?usp=sharing
+
 ## Team Information
 
 **Team Name**: CodexCoders  
@@ -51,7 +55,7 @@ To create Galaxy devices that **never slow down, never crash, and never compromi
 
 ### System Architecture Overview
 
-![SmartFix-AI Technical Architecture](Submissions/Results/system_architecture_flow.png)
+![SmartFix-AI Technical Architecture](Submissions/docs/ARCHITECTURE_DIAGRAM.png)
 
 **Architecture Explanation:**
 
@@ -121,7 +125,6 @@ The SmartFix-AI system is built on a comprehensive multi-layered architecture th
 - Service Cost Reduction: 40% decrease in warranty claims
 - Customer Satisfaction: 70% improvement in device longevity perception
 - Brand Loyalty: 25% reduction in customer churn to competitors
-- Revenue Growth: $1.5B+ annual revenue impact potential
 
 ### Environmental Impact
 - Device Lifespan Extension: 12-18 months average
@@ -164,7 +167,7 @@ The SmartFix-AI system is built on a comprehensive multi-layered architecture th
 - **Performance Metrics**: 18 comprehensive performance analysis charts
 - **System Architecture**: Visual system flow diagrams
 - **AI Model Comparisons**: Efficiency matrices and comparison charts
-- **Market Analysis**: Competitive analysis and ROI projections
+- **Market Analysis**: Competitive analysis and market impact projections
 - **User Interface**: Screenshots of all major components
 - **Data Processing**: Pipeline visualizations and processing time analysis
 
@@ -196,11 +199,6 @@ The SmartFix-AI system is built on a comprehensive multi-layered architecture th
 - Support Cost Reduction: 70% reduction in customer support tickets
 - Repair Cost Avoidance: $2-3 billion annual savings in repair ecosystem
 
-### Revenue Generation Opportunities
-- Premium Service Tiers: Galaxy Autopilot Pro subscription model
-- Enterprise Licensing: B2B Galaxy Autopilot for corporate customers
-- API Monetization: Third-party developer access to Galaxy Autopilot APIs
-- Data Insights: Anonymized device health data for product improvement
 
 ### Competitive Advantage
 - Proactive vs Reactive: Galaxy Autopilot prevents issues vs competitors' reactive fixes
@@ -264,20 +262,6 @@ The SmartFix-AI system is built on a comprehensive multi-layered architecture th
 4. **Sustainability Leadership**: Leverage Autoheal for circular economy initiatives
 5. **Global Market Domination**: Establish Samsung as the definitive leader in autonomous device intelligence
 
-## Financial Projections
-
-### Investment Requirements
-- R&D Investment: $50M over 2 years
-- Infrastructure: $20M for cloud and data processing
-- Marketing: $30M for customer education and brand positioning
-- Total Investment: $100M over 2 years
-
-### Revenue Projections
-- Year 1: $200M service cost savings
-- Year 2: $500M service cost savings + $100M premium service revenue
-- Year 3: $800M service cost savings + $300M premium service revenue
-- Target Market Revenue: $950M additional revenue from agricultural, senior, and gaming markets by Year 3
-- ROI: 800% return on investment by Year 3
 
 ## Conclusion
 
@@ -285,14 +269,14 @@ SmartFix-AI represents a transformative opportunity for Samsung to address funda
 
 ### Key Success Factors
 1. **Technical Excellence**: Multi-layer healing architecture with real system integration
-2. **Business Impact**: Significant cost reduction and revenue generation potential
+2. **Business Impact**: Significant cost reduction and operational efficiency improvements
 3. **Competitive Advantage**: Vertical integration advantage competitors cannot replicate
 4. **Market Timing**: Optimal window before competitors develop similar capabilities
 5. **Demographic Reach**: Unprecedented accessibility for farmers, seniors, and gaming communities
 6. **Social Impact**: Technology democratization and digital inclusion initiatives
 
 ### Call to Action
-Immediate investment in SmartFix-AI development will position Samsung to lead the next generation of intelligent, self-maintaining consumer devices, creating a sustainable competitive advantage while addressing critical customer pain points, environmental sustainability goals, and revolutionizing technology accessibility for farmers, senior citizens, and gaming communities worldwide.
+SmartFix-AI development will position Samsung to lead the next generation of intelligent, self-maintaining consumer devices, creating a sustainable competitive advantage while addressing critical customer pain points, environmental sustainability goals, and revolutionizing technology accessibility for farmers, senior citizens, and gaming communities worldwide.
 
 ---
 
@@ -302,10 +286,6 @@ Immediate investment in SmartFix-AI development will position Samsung to lead th
 
 **Note**: The current implementation includes a web-based demonstration interface solely for concept visualization and hackathon presentation purposes. In actual deployment, Galaxy Autopilot would function as native Android system software integrated into Samsung Galaxy devices.
 
-## Project Demonstration
-
-**Video Demonstration**: https://drive.google.com/file/d/1afr_XPnipVjzcVqpqOaGBQd0UeChpY1U/view?usp=sharing
-
 ## Contact Information
 
 **Team CodexCoders**  
@@ -314,7 +294,13 @@ Immediate investment in SmartFix-AI development will position Samsung to lead th
 
 ---
 
+## From CodexCoders Team
+
+We are honored to present SmartFix-AI to Samsung Electronics, a company that has consistently demonstrated visionary leadership in consumer electronics innovation. Samsung's commitment to pushing technological boundaries and creating devices that enhance human experiences aligns perfectly with our vision of autonomous device intelligence.
+
+As Indian developers passionate about technology innovation, we are inspired by Samsung's legacy of innovation, from pioneering smartphone technology to advancing AI and semiconductor capabilities. We believe SmartFix-AI represents the future of device maintenance that Samsung can lead, transforming how users interact with technology and ensuring Galaxy devices remain at the forefront of innovation.
+
 **SmartFix-AI: Redefining Galaxy device intelligence through autonomous self-healing technology, empowering farmers, senior citizens, and gaming communities worldwide.**
 
 *Prepared for Samsung PRISM GenAI Hackathon 2025*  
-*Team CodexCoders Submission*
+*Team CodexCoders - Indian Developers*

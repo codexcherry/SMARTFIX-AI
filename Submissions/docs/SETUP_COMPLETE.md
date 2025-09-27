@@ -792,7 +792,6 @@ cp .env .env.backup.$(date +%Y%m%d_%H%M%S)
 
 ### Support
 - [GitHub Issues](https://github.com/codexcherry/SMARTFIX-AI/issues)
-- [Discord Community](https://discord.gg/smartfix-ai)
 - [Email Support](mailto:support@smartfix-ai.com)
 
 ### Contributing

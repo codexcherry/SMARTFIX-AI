@@ -744,7 +744,6 @@ graph TB
 
 ### **Support & Community**
 - [GitHub Repository](https://github.com/codexcherry/SMARTFIX-AI)
-- [Discord Community](https://discord.gg/smartfix-ai)
 - [Email Support](mailto:support@smartfix-ai.com)
 
 ### **Contributing**
@@ -762,7 +761,14 @@ graph TB
 
 ---
 
+## From CodexCoders Team
+
+We are honored to present SmartFix-AI to Samsung Electronics, a company that has consistently demonstrated visionary leadership in consumer electronics innovation. Samsung's commitment to pushing technological boundaries and creating devices that enhance human experiences aligns perfectly with our vision of autonomous device intelligence.
+
+Samsung's legacy of innovation, from pioneering smartphone technology to advancing AI and semiconductor capabilities, inspires us to contribute to the next chapter of intelligent device management. We believe SmartFix-AI represents the future of device maintenance that Samsung can lead, transforming how users interact with technology and ensuring Galaxy devices remain at the forefront of innovation.
+
 **SmartFix-AI Technical Architecture** - Comprehensive system design for intelligent, self-healing device management.
 
 *Built for Samsung Galaxy Ecosystem Excellence*
+*Prepared by CodexCoders Team for Samsung PRISM GenAI Hackathon 2025*
 *Version 1.0 - January 2025*

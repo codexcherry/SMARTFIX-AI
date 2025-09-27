@@ -237,7 +237,6 @@ Development roadmap and future plans:
 ### Getting Help
 - **Documentation**: Comprehensive guides and references
 - **GitHub Issues**: Bug reports and feature requests
-- **Discord Community**: Real-time support and discussions
 - **Email Support**: Direct technical support
 
 ### Contributing
@@ -246,9 +245,6 @@ Development roadmap and future plans:
 - **Testing**: Bug testing and quality assurance
 - **Community**: Helping other users and developers
 
-## 📄 License
-
-SmartFix-AI is licensed under the MIT License. See the [LICENSE](../LICENSE) file for details.
 
 ## 🙏 Acknowledgments
 
@@ -259,6 +255,12 @@ SmartFix-AI is licensed under the MIT License. See the [LICENSE](../LICENSE) fil
 
 ---
 
-**SmartFix-AI** - Redefining device intelligence through autonomous self-healing technology! 🚀✨
+## From CodexCoders Team
 
-For the latest updates and announcements, follow our [GitHub repository](https://github.com/codexcherry/SMARTFIX-AI) and join our [Discord community](https://discord.gg/smartfix-ai).
+We are honored to present SmartFix-AI to Samsung Electronics, a company that has consistently demonstrated visionary leadership in consumer electronics innovation. Samsung's commitment to pushing technological boundaries and creating devices that enhance human experiences aligns perfectly with our vision of autonomous device intelligence.
+
+Samsung's legacy of innovation, from pioneering smartphone technology to advancing AI and semiconductor capabilities, inspires us to contribute to the next chapter of intelligent device management. We believe SmartFix-AI represents the future of device maintenance that Samsung can lead, transforming how users interact with technology and ensuring Galaxy devices remain at the forefront of innovation.
+
+**SmartFix-AI** - Redefining device intelligence through autonomous self-healing technology!
+
+*Prepared by CodexCoders Team for Samsung PRISM GenAI Hackathon 2025*
